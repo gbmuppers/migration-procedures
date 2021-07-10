@@ -105,7 +105,7 @@
         type: Object,
         handler () {
           
-          this.output_model_type = "\\App\\Models\\Procedimiento::create(['titulo' =>'"+this.procedimiento.nombre+"', 'clave' =>'"+this.procedimiento.clave+"','contenido' =>'"+this.procedimiento.contenido_escrito.replaceAll('\n','\\n')+"']);";
+          this.output_model_type = "\\App\\Models\\Procedimiento::create(['titulo' =>'"+this.procedimiento.nombre+"', 'clave' =>'"+this.procedimiento.clave+"','contenido' =>'"+this.procedimiento.contenido_escrito+"']);"; //.replaceAll('\n','\\n')
           var latest = "$procedimiento = \\App\\Models\\Procedimiento::latest()->first();";;
           var attach = "$procedimiento->puesto()->attach(["+this.procedimiento.dirigido_a+"]);";
           this.output_model_type+="\n"+latest+"\n"+attach;
