@@ -1,8 +1,9 @@
  <template>
   <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 mt-2">
             <form method="post">
+                <button @click="clear" class="btn btn-danger link-light float-end" type="button">Limpiar fomulario <i class="fas fa-eraser"></i></button>
                 <h2 class="text-center">Procedimiento</h2>
                 <div class="mb-3">
                   <span>Nombre</span>
@@ -38,7 +39,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-6 py-5">
+        <div class="col-md-6 py-5 mt-2">
             <div class="mb-3">
               <button class="btn btn-info link-light float-end" type="button" v-clipboard:copy="output_model_type" v-clipboard:success="onCopy" v-clipboard:error="onError">Copiar <i class="fas fa-paperclip"></i></button>
               <span class="text-secondary">Salida tipo Model</span>
@@ -109,13 +110,13 @@
           var attach = "$procedimiento->puesto()->attach(["+this.procedimiento.dirigido_a+"]);";
           this.output_model_type+="\n"+latest+"\n"+attach;
           
-          this.output_sql_type = this.procedimiento.nombre + this.procedimiento.clave + " SQL";
+          this.output_sql_type = "SQL";
         },
         deep:true,
       },
     },
     methods:{
-      onCopy: function (e) {
+      onCopy: function () {
         Swal.fire({
           position: 'bottom-end',
           icon: 'success',
@@ -125,7 +126,7 @@
         })
         //alert('You just copied the following text to the clipboard: ' + e.text)
       },
-      onError: function (e) {
+      onError: function () {
         Swal.fire({
           position: 'bottom-end',
           icon: 'error',
@@ -133,8 +134,14 @@
           showConfirmButton: false,
           timer: 1500
         })
-          //alert('Failed to copy the text to the clipboard')
-          //console.log(e);
+      },
+      clear(){
+        this.procedimiento.nombre = ''
+        this.procedimiento.clave = ''
+        this.procedimiento.contenido_escrito = ''
+        this.procedimiento.dirigido_a = []
+        this.output_model_type = ''
+        this.output_sql_type = ''
       }
     }
   }
