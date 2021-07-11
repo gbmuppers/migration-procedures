@@ -34,7 +34,7 @@
                 <div class="mb-3">
                   <span>¿A quién va dirigido?</span>
                   <select v-model="procedimiento.dirigido_a" class="form-select" multiple aria-label="multiple select example">
-                        <option v-for="(opcion,index) in opciones_puestos" :key="index" :value="opcion.id_puesto">{{ opcion.puesto }}</option>
+                    <option v-for="(opcion,index) in opciones_puestos" :key="index" :value="opcion.id_puesto">{{ opcion.puesto }}</option>
                   </select>
                 </div>
             </form>
@@ -61,37 +61,13 @@
   export default {
     name: 'App',
     components: {
-      'editor': Editor
+      'editor': Editor,
     },
     data(){
       return{
         output_model_type: '',
         output_sql_type: '',
-        opciones_puestos:[
-          {"id_puesto":1,"puesto":"Administrador del sistema"},
-          {"id_puesto":2,"puesto":"Junta directiva"},
-          {"id_puesto":3,"puesto":"Director de experiencias"},
-          {"id_puesto":5,"puesto":"Recursos humanos"},
-          {"id_puesto":6,"puesto":"Mercadotecnia"},
-          {"id_puesto":7,"puesto":"Auxiliar de mercadotecnia"},
-          {"id_puesto":8,"puesto":"Caja general"},
-          {"id_puesto":9,"puesto":"Auxiliar de caja general"},
-          {"id_puesto":10,"puesto":"Inventarios"},
-          {"id_puesto":11,"puesto":"Auxiliar de inventarios"},
-          {"id_puesto":12,"puesto":"Almacén accesorios"},
-          {"id_puesto":13,"puesto":"Auxiliar de almacén accesorios"},
-          {"id_puesto":14,"puesto":"Contabilidad"},
-          {"id_puesto":15,"puesto":"Auxiliar de contabilidad"},
-          {"id_puesto":16,"puesto":"Almacén telefonía"},
-          {"id_puesto":17,"puesto":"Dirección de contenidos"},
-          {"id_puesto":18,"puesto":"Jefe de sistemas"},
-          {"id_puesto":19,"puesto":"Almacén técnico"},
-          {"id_puesto":20,"puesto":"Almacén baterias"},
-          {"id_puesto":21,"puesto":"Lider de experiencia"},
-          {"id_puesto":22,"puesto":"Técnico"},
-          {"id_puesto":23,"puesto":"Cajero"},
-          {"id_puesto":24,"puesto":"Vendedor"}
-        ],
+        opciones_puestos:[{"id_puesto":1,"puesto":"Administrador del sistema"},{"id_puesto":2,"puesto":"Junta directiva"},{"id_puesto":3,"puesto":"Director de experiencias"},{"id_puesto":5,"puesto":"Jefe de contenidos"},{"id_puesto":6,"puesto":"Jefe de recursos humanos"},{"id_puesto":7,"puesto":"Jefe de contabilidad"},{"id_puesto":8,"puesto":"Jefe de sistemas"},{"id_puesto":9,"puesto":"Jefe de almacén"},{"id_puesto":10,"puesto":"Jefe de finanzas"},{"id_puesto":11,"puesto":"Jefe de inventarios"},{"id_puesto":12,"puesto":"Jefe de telefonía"},{"id_puesto":13,"puesto":"Jefe del área técnica"},{"id_puesto":14,"puesto":"Jefe de Mantenimiento"},{"id_puesto":15,"puesto":"Jefe de mercadotecnia"},{"id_puesto":16,"puesto":"Jefe de almacén baterias"},{"id_puesto":17,"puesto":"Auxiliar de contabilidad"},{"id_puesto":18,"puesto":"Auxiliar de almacén"},{"id_puesto":19,"puesto":"Auxiliar de finanzas"},{"id_puesto":20,"puesto":"Auxiliar de inventarios"},{"id_puesto":21,"puesto":"Auxiliar de mercadotecnia"},{"id_puesto":22,"puesto":"Lider de experiencia"},{"id_puesto":23,"puesto":"Recepción de equipos"},{"id_puesto":24,"puesto":"Técnico nivel 1"},{"id_puesto":25,"puesto":"Técnico nivel 2"},{"id_puesto":26,"puesto":"Técnico nivel 3"},{"id_puesto":27,"puesto":"Técnico express"},{"id_puesto":28,"puesto":"Apasionado de la telefonía"},{"id_puesto":29,"puesto":"Cajero"},{"id_puesto":30,"puesto":"Traslado de valores"}],
         procedimiento:{
           nombre: '',
           clave: '',
@@ -104,13 +80,17 @@
       procedimiento:{
         type: Object,
         handler () {
-          
-          this.output_model_type = "\\App\\Models\\Procedimiento::create(['titulo' =>'"+this.procedimiento.nombre+"', 'clave' =>'"+this.procedimiento.clave+"','contenido' =>'"+this.procedimiento.contenido_escrito+"']);"; //.replaceAll('\n','\\n')
+          this.output_model_type = "\\App\\Models\\Procedimiento::create(['titulo' =>'"+this.procedimiento.nombre+"', 'clave' =>'"+this.procedimiento.clave+"','contenido' =>'"+this.procedimiento.contenido_escrito.replaceAll('\'','\\\'')+"']);"; //.replaceAll('\n','\\n')
           var latest = "$procedimiento = \\App\\Models\\Procedimiento::latest()->first();";;
           var attach = "$procedimiento->puesto()->attach(["+this.procedimiento.dirigido_a+"]);";
           this.output_model_type+="\n"+latest+"\n"+attach;
-          
-          this.output_sql_type = "SQL";
+
+
+          var insert = "INSERT INTO procedimientos (clave, titulo, contenido) VALUES ('"+this.procedimiento.clave+"','"+this.procedimiento.nombre+"','"+this.procedimiento.contenido_escrito.replaceAll('\'','\\\'')+"');\n";
+          var foreign = ""
+          this.procedimiento.dirigido_a.forEach(value => foreign += "INSERT INTO procedimiento_puesto VALUES ((SELECT id_procedimiento FROM procedimientos ORDER BY id_procedimiento DESC LIMIT 1),"+value+");\n");
+
+          this.output_sql_type = insert+foreign;
         },
         deep:true,
       },
