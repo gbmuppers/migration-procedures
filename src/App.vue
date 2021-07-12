@@ -22,10 +22,10 @@
                           height: 250,
                           menubar: false,
                           plugins: [
-                          'preview paste searchreplace autolink directionality code visualblocks visualchars fullscreen link codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount textpattern noneditable help quickbars emoticons'
+                          'preview paste searchreplace autolink directionality code visualblocks visualchars fullscreen link codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount textpattern noneditable help quickbars emoticons table'
                           ],
                           toolbar:
-                          'undo redo | fullscreen preview | bold italic underline strikethrough | link codesample | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | ltr rtl',
+                          'undo redo | fullscreen preview | bold italic underline strikethrough | link codesample | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | ltr rtl',
                           quickbars_insert_toolbar: 'link',
                           toolbar_sticky: true,
                       }"
